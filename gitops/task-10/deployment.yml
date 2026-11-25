@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: task-10-container
-          image: jpraveen97/task-10-app:latest
+          image: jpraveen97/task-10-app:004561506fd852be6c5412b6e93db6d703e5b859
           imagePullPolicy: Always
 
           ports:
