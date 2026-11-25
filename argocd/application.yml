@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: task-10
+  namespace: argocd
+
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/jpraveen97/docker-k8s-task-10.git
+    targetRevision: main
+    path: gitops/task-10
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: task-10
+
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true

@@ -52,4 +52,28 @@ jobs:
         with:
           context: ./app
           push: true
-          tags: jpraveen97/task-10-app:latest
+          tags: |
+            jpraveen97/task-10-app:latest
+            jpraveen97/task-10-app:${{ github.sha }}
+
+  update-gitops:
+    needs: docker-build-and-push
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Update Kubernetes image
+        run: |
+          sed -i "s|image: jpraveen97/task-10-app:.*|image: jpraveen97/task-10-app:${GITHUB_SHA}|" gitops/task-10/deployment.yml
+
+      - name: Commit and push GitOps change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add gitops/task-10/deployment.yml
+          git commit -m "Update Task-10 image to ${GITHUB_SHA} [skip ci]"
+          git push
